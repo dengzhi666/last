@@ -17,8 +17,8 @@ import java.util.List;
 @SpringBootTest(classes = {CmfzZhenglApplication.class})
 @RunWith(SpringRunner.class)
 public class TestRedis {
-//    @Autowired
-//    private StringRedisTemplate stringRedisTemplate;
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private AdminService adminService;
 
