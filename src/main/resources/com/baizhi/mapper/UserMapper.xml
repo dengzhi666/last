@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.UserDao">
+    <select id="selectAllUser" resultType="User">
+          select * from
+         (select u.*,rownum rn from (select user_id as id ,phone, password,salt,dharmaname,province,city,gender,personal_sign personalSign,profile,status, regist_time registTime from c_user ) u)
+          where rn &gt;= #{begin} and rn &lt;=#{end}
+    </select>
+
+    <select id="selectAll" resultType="User">
+         select user_id as id ,phone, password,salt,dharmaname,province,city,gender,personal_sign personalSign,profile,status, regist_time registTime from c_user
+    </select>
+    <select id="selectByPhone" resultType="User">
+         select user_id as id ,phone, password,salt,dharmaname,province,city,gender,personal_sign personalSign,profile,status, regist_time registTime from c_user where phone = #{phone}
+    </select>
+    <update id="updateStatus" >
+        update c_user set status = #{status} where user_id = #{id}
+    </update>
+
+    <select id="countUser" resultType="Integer">
+        select count (*) from c_user
+    </select>
+
+    <insert id="insert">
+        insert into c_user(user_id, phone,password,salt, dharmaname, province, city, gender, personal_sign, status, regist_time
+        <if test="profile!=null">,profile</if>
+        )
+        values (#{id},#{phone},#{password},#{salt},#{dharmaname},#{province},#{city},#{gender},#{personalSign},#{status},#{registTime}
+        <if test="profile!=null">,#{profile}</if>
+        )
+    </insert>
+    <select id="countRegistUserByMonth" resultType="map">
+          select to_char(regist_time,'yyyy-MM') month,count(user_id) count from c_user group by to_char(regist_time,'yyyy-MM') order by to_char(regist_time,'yyyy-MM')
+    </select>
+    <select id="userDistributionByGender" resultType="map">
+        select count(user_id) "value",province "name" from c_user where gender=#{gender}
+        group by province
+    </select>
+    <select id="userDistributionMaxCount" resultType="int">
+        select max(value) from (select count(user_id) value,province name from c_user
+        group by province) t
+    </select>
+</mapper>

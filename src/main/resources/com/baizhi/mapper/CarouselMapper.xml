@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.CarouselDao">
+    <insert id="insertCarousel">
+        insert into  c_carousel values (
+        #{id},#{title},#{imgpath},#{status},#{createTime}
+        )
+    </insert>
+    <select id="countCarousel" resultType="int">
+        select count (*) from c_carousel
+    </select>
+    <select id="selectAllCarousel" resultType="Carousel">
+          select * from
+         (select u.*,rownum rn from (select carousel_id as id,title,imgpath,status,create_time as createTime from c_carousel) u)
+          where rn &gt;= #{begin} and rn &lt;=#{end}
+    </select>
+</mapper>

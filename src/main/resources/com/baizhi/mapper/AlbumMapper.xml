@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.AlbumDao">
+    <insert id="insertAlbum">
+        insert into  c_album values (
+        #{id},#{title},#{cover},#{count},#{score},#{author},#{broadcast},#{brief},#{publishTime}
+        )
+    </insert>
+    <select id="countAlbum" resultType="int">
+        select count (*) from c_album
+    </select>
+    <select id="selectAllAlbum" resultType="Album">
+          select * from
+         (select u.*,rownum rn from (select album_id as id,title,cover,count,score,author,broadcast,brief,publish_time publishTime  from c_album) u)
+          where rn &gt;= #{begin} and rn &lt;=#{end}
+    </select>
+    <select id="selectOneAlbum" resultType="Album">
+         select album_id as id,title,cover,count,score,author,broadcast,brief,publish_time publishTime  from c_album where album_id = #{id}
+    </select>
+
+    <update id="updateAlbum">
+        update c_album set count = #{count} where album_id = #{id}
+    </update>
+</mapper>

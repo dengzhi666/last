@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.baizhi.dao.ChapterDao">
+    <insert id="insertChapter">
+        insert into c_chapter values (
+        #{id},#{albumId},#{title},#{chapterSize},#{downpath},#{uploadTime}
+        )
+    </insert>
+
+    <select id="countChapter" resultType="Integer">
+        select count (*) from c_chapter where album_id = #{albumId}
+    </select>
+    <select id="selectAllChapter" resultType="Chapter">
+          select * from
+         (select u.*,rownum rn from (select chapter_id as id,album_id albumId,title,chapter_size chapterSize,downpath,upload_time uploadTime from c_chapter where album_id = #{albumId}) u)
+          where rn &gt;= #{begin} and rn &lt;=#{end}
+    </select>
+</mapper>
