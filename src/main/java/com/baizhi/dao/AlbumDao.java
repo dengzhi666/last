@@ -11,6 +11,5 @@ public interface AlbumDao {
     void updateAlbum(Album album);
     Integer countAlbum();
     List<Carousel> selectAllAlbum(@Param("begin") Integer begin, @Param("end") Integer end);
-
     Album selectOneAlbum(String id);
 }

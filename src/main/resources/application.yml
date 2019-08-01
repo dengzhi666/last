@@ -28,6 +28,12 @@ spring:
       suffix: .jsp
   redis:
     host: 192.168.19.131
+  data:
+    elasticsearch:
+      cluster-nodes: 192.168.19.131:9300
+  output:
+    ansi:
+      enabled: always
 #  mapper文件的包扫描
 mybatis:
   type-aliases-package: com.baizhi.entity
@@ -39,5 +45,5 @@ logging:
     com.baizhi.aspect: debug
     #path:
     pattern:
-      console: '[%p] [%d{yyyy-MM-dd HH:mm:ss}] %c %m %n'
+      console: '%clr(%d{yyyy-MM-dd HH:mm:ss.SSS})'
 

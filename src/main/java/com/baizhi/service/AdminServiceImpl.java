@@ -20,6 +20,8 @@ import java.util.Map;
 public class AdminServiceImpl implements AdminService{
     @Autowired
     private AdminDao adminDao;
+
+
     @Override
     @AopAnnotation
     public List<Admin> queryAll() {

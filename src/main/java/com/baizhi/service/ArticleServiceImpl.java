@@ -1,10 +1,9 @@
 package com.baizhi.service;
 
-import com.baizhi.dao.AlbumDao;
+import com.baizhi.conf.ArticleDaoEs;
+import com.baizhi.conf.ArticleReposiroty;
 import com.baizhi.dao.ArticleDao;
-import com.baizhi.entity.Album;
 import com.baizhi.entity.Article;
-import com.baizhi.entity.Carousel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -20,6 +19,10 @@ import java.util.UUID;
 public class ArticleServiceImpl implements ArticleService{
     @Autowired
     private ArticleDao articleDao;
+    @Autowired
+    private ArticleReposiroty articleReposiroty;
+    @Autowired
+    private ArticleDaoEs articleDaoEs;
 
     @Transactional(propagation = Propagation.SUPPORTS,readOnly = true)
     @Override
@@ -35,7 +38,6 @@ public class ArticleServiceImpl implements ArticleService{
         map.put("records",records); //数据总条数
         map.put("total",total);//存入总页数
         map.put("rows",list);//存入总页数
-
         return map;
     }
 
@@ -58,5 +60,18 @@ public class ArticleServiceImpl implements ArticleService{
     @Override
     public Article queryOne(String id) {
         return articleDao.selectOneArticle(id);
+    }
+
+    @Override
+    public String addArticleEs(Article article) {
+        String id = UUID.randomUUID().toString();
+        article.setId(id);
+        articleReposiroty.save(article);
+        return id;
+    }
+
+    @Override
+    public List<Article> findByNameAndHighLight(String name, int Page, int size) {
+        return articleDaoEs.findByNameAndHighLight(name,Page, size);
     }
 }

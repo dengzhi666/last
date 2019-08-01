@@ -1,4 +1,4 @@
-package com;
+package com.baizhi;
 
 import com.baizhi.CmfzZhenglApplication;
 import io.goeasy.GoEasy;
