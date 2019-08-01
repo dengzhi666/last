@@ -17,18 +17,20 @@ package com.baizhi;
 public class TestArticleReposiroty {
     @Autowired
     private ArticleService articleService;
-    @Autowired
-    ArticleReposiroty articleReposiroty;
+
 
     @Test
     public void m2(){
-        List<Article> articles = articleService.findByNameAndHighLight("故事", 1, 1);
+        List<Article> articles = articleService.findByNameAndHighLight("故事", 0, 3);
         System.out.println(articles);
     }
 
 
     @Test
     public void m1(){
-        articleReposiroty.save(new Article(null,"6","西游记","吴承恩","一个和尚和三个徒弟西天取经的故事",new Date()));
+        articleService.addArticleEs(new Article(null,"1","西游记","吴承恩","一个和尚和三个徒弟西天取经的故事",new Date()));
+        articleService.addArticleEs(new Article(null,"2","水浒传","施耐庵","108将梁山聚义，然后又招安的故事",new Date()));
+        articleService.addArticleEs(new Article(null,"3","三国演义","罗贯中","三国时期烽烟四起，群侯争霸的故事",new Date()));
+        articleService.addArticleEs(new Article(null,"4","红楼梦","曹雪芹","贾宝玉和林黛玉悲惨爱情 的故事",new Date()));
     }
 }

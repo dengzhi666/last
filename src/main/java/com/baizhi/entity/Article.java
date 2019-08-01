@@ -26,7 +26,7 @@ public class Article implements Serializable {
     private String title;
     @Field(type = FieldType.Keyword)
     private String author;
-    @Field(type = FieldType.Text)
+    @Field(type = FieldType.Text,analyzer = "ik_max_word")
     private String content;
     @Field(type = FieldType.Date)
     @DateTimeFormat(pattern = "yyyy-MM-dd")

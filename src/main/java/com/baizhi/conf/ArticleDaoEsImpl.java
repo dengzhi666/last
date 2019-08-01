@@ -35,28 +35,33 @@ public class ArticleDaoEsImpl implements ArticleDaoEs {
 
     @Override
     public List<Article> findByNameAndHighLight(String name, int page, int size) {
-        //首先获取一个高亮器
-        HighlightBuilder.Field field = new HighlightBuilder
+        HighlightBuilder.Field nameField = new HighlightBuilder
                 .Field("*")
-                .preTags("<span style=' olor:red'>")
+                .preTags("<span style='color:red'>")
                 .postTags("</span>").requireFieldMatch(false);
-        // 构建搜索的
+
+
         NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
-                .withQuery(QueryBuilders.multiMatchQuery("author","title","content"))
+
+                .withQuery(QueryBuilders.multiMatchQuery(name, "title", "content", "author"))
                 .withPageable(PageRequest.of(page, size))
-                .withHighlightFields(field)
+                .withHighlightFields(nameField)
                 .build();
 
         AggregatedPage<Article> articles = elasticsearchTemplate.queryForPage(nativeSearchQuery, Article.class, new SearchResultMapper() {
             @Override
             public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
+
+                System.out.println("进入到了匿名内部中");
                 SearchHits searchHits = response.getHits();
                 SearchHit[] hits = searchHits.getHits();
                 ArrayList<Article> articles = new ArrayList<Article>();
                 for (SearchHit hit : hits) {
+
                     Article article = new Article();
                     //原始map
                     Map<String, Object> sourceAsMap = hit.getSourceAsMap();
+                    System.out.println("打印map"+sourceAsMap);
                     article.setId(sourceAsMap.get("id").toString());
                     article.setGuruId(sourceAsMap.get("guruId").toString());
                     article.setAuthor(sourceAsMap.get("author").toString());
@@ -65,14 +70,12 @@ public class ArticleDaoEsImpl implements ArticleDaoEs {
                     String publishTime = sourceAsMap.get("publishTime").toString();
                     System.out.println(publishTime);
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                    Date parse = null;
                     try {
-                        parse = simpleDateFormat.parse(publishTime);
+                        Date parse = simpleDateFormat.parse(publishTime);
                         article.setPublishTime(parse);
                     } catch (ParseException e) {
                         e.printStackTrace();
                     }
-
                     //高亮
                     Map<String, HighlightField> highlightFields = hit.getHighlightFields();
                     System.out.println(highlightFields);
@@ -90,7 +93,7 @@ public class ArticleDaoEsImpl implements ArticleDaoEs {
                     }
                     articles.add(article);
                 }
-                return new AggregatedPageImpl<T>((List<T>)articles);
+                return new AggregatedPageImpl<T>((List<T>) articles);
             }
         });
         return articles.getContent();

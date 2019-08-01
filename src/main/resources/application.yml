@@ -40,7 +40,7 @@ mybatis:
   mapper-locations: com/baizhi/mapper/*Mapper.xml
 logging:
   level:
-    root: error
+    root: info
     com.baizhi.dao: debug
     com.baizhi.aspect: debug
     #path:
