@@ -11,6 +11,7 @@ package com.baizhi;
 
         import java.util.Date;
         import java.util.List;
+        import java.util.Map;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = {CmfzZhenglApplication.class})
@@ -21,8 +22,9 @@ public class TestArticleReposiroty {
 
     @Test
     public void m2(){
-        List<Article> articles = articleService.findByNameAndHighLight("故事", 0, 3);
-        System.out.println(articles);
+        Map<String, Object> map = articleService.searchEsArticleByPage("故事", 0, 3);
+
+        System.out.println(map);
     }
 
 

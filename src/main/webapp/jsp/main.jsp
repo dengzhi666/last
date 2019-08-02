@@ -86,6 +86,9 @@
                             <ul class="nav nav-pills">
                                 <li role="presentation" ><a href="javascript:$('#contentRight').load('${pageContext.request.contextPath}/jsp/article.jsp')">文章管理</a></li>
                            </ul>
+                            <%--<ul class="nav nav-pills">--%>
+                                <%--<li role="presentation" ><a href="javascript:$('#contentRight').load('${pageContext.request.contextPath}/jsp/es_article.jsp')">es文章管理</a></li>--%>
+                            <%--</ul>--%>
                          </div>
 
                     </div>

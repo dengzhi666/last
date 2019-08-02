@@ -14,5 +14,6 @@ public interface ArticleService {
 
     //---------Es---------
     String addArticleEs(Article article);
-    List<Article> findByNameAndHighLight(String name , int Page , int size);
+
+    Map<String,Object> searchEsArticleByPage(String name, int page , int rows);
 }

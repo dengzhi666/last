@@ -16,11 +16,12 @@
             height:200,
             multiselect:true,
             rownumbers:true,
-            colNames:["编号","上师编号","标题","内容","上传时间"],
+            colNames:["编号","上师编号","标题","作者","内容","上传时间"],
             colModel:[
                 {name:"id"},
                 {name:"guruId",editable:true},
                 {name:"title",editable:true },
+                {name:"author",editable:true },
                 {name:"content",editable:true,formatter:function(cellvalue, options, rowObject){
                         return "<button type='button' class='btn btn-primary' onclick='queryArticle(\""+rowObject.id +"\")'> 浏览</button>"
                     }
@@ -92,7 +93,28 @@
             }
         })
     }
+
+    function searchEsArticle() {
+        $("#articleTable").jqGrid('clearGridData');
+        var itemURL = '${pageContext.request.contextPath}/article/searchEsArticle?'+$('#esform').serialize();
+        $("#articleTable").setGridParam({url:itemURL}).trigger("reloadGrid");
+
+    }
 </script>
+
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+            <form class="navbar-form navbar-left" id="esform">
+                <div class="form-group">
+                    <input type="text" class="form-control" placeholder="请输入要搜索的关键词" name="name">
+                </div>
+                <button type="button" class="btn btn-default" onclick="searchEsArticle()">搜索</button>
+            </form>
+        </div><!-- /.navbar-collapse -->
+    </div><!-- /.container-fluid -->
+</nav>
+
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#myModal">
     文章上传
@@ -128,8 +150,6 @@
                         <textarea id="editor_id" name="content" style="width:700px;height:300px;">
                                     文本内容
                         </textarea>
-
-
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>

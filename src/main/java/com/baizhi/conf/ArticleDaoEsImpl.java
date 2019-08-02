@@ -52,23 +52,19 @@ public class ArticleDaoEsImpl implements ArticleDaoEs {
             @Override
             public <T> AggregatedPage<T> mapResults(SearchResponse response, Class<T> clazz, Pageable pageable) {
 
-                System.out.println("进入到了匿名内部中");
                 SearchHits searchHits = response.getHits();
                 SearchHit[] hits = searchHits.getHits();
                 ArrayList<Article> articles = new ArrayList<Article>();
                 for (SearchHit hit : hits) {
-
                     Article article = new Article();
                     //原始map
                     Map<String, Object> sourceAsMap = hit.getSourceAsMap();
-                    System.out.println("打印map"+sourceAsMap);
                     article.setId(sourceAsMap.get("id").toString());
                     article.setGuruId(sourceAsMap.get("guruId").toString());
                     article.setAuthor(sourceAsMap.get("author").toString());
                     article.setContent(sourceAsMap.get("content").toString());
                     article.setTitle(sourceAsMap.get("title").toString());
                     String publishTime = sourceAsMap.get("publishTime").toString();
-                    System.out.println(publishTime);
                     SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     try {
                         Date parse = simpleDateFormat.parse(publishTime);
@@ -78,7 +74,6 @@ public class ArticleDaoEsImpl implements ArticleDaoEs {
                     }
                     //高亮
                     Map<String, HighlightField> highlightFields = hit.getHighlightFields();
-                    System.out.println(highlightFields);
                     if (highlightFields.get("title") != null) {
                         String nameHighlight = highlightFields.get("title").getFragments()[0].toString();
                         article.setTitle(nameHighlight);
@@ -97,5 +92,14 @@ public class ArticleDaoEsImpl implements ArticleDaoEs {
             }
         });
         return articles.getContent();
+    }
+
+    @Override
+    public Integer findByNameAndHighlightAndPageableRecords(String name) {
+        NativeSearchQuery nativeSearchQuery = new NativeSearchQueryBuilder()
+                .withQuery(QueryBuilders.multiMatchQuery(name,"title","content","author"))
+                .build();
+        List<Article> articles1 = elasticsearchTemplate.queryForList(nativeSearchQuery, Article.class);
+        return articles1.size();
     }
 }

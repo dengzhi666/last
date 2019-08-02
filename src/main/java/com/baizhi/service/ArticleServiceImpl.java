@@ -71,7 +71,19 @@ public class ArticleServiceImpl implements ArticleService{
     }
 
     @Override
-    public List<Article> findByNameAndHighLight(String name, int Page, int size) {
-        return articleDaoEs.findByNameAndHighLight(name,Page, size);
+    public Map<String, Object> searchEsArticleByPage(String name, int page, int rows) {
+        Map<String , Object> map = new HashMap<>();
+
+
+        List<Article> list = articleDaoEs.findByNameAndHighLight(name, page-1, rows);
+        System.out.println(list+"测试es 集合");
+        Integer records = articleDaoEs.findByNameAndHighlightAndPageableRecords(name);
+
+        Integer total = (records % rows == 0)?(records/rows):(records/rows+1);
+        map.put("page",page);
+        map.put("rows",list);
+        map.put("records",records);
+        map.put("total",total);
+        return  map;
     }
 }

@@ -115,4 +115,14 @@ public class ArticleController {
     public Article queryOneArticle(String id){
         return  articleService.queryOne(id);
     }
+
+    @RequestMapping("searchEsArticle")
+    @ResponseBody
+    public Map<String,Object> searchEsArticle(String name,  int page , int rows){
+        Map<String, Object> map = articleService.searchEsArticleByPage(name, page, rows);
+        System.out.println(map);
+        return map;
+    }
 }
+
+
